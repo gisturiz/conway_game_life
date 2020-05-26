@@ -2,8 +2,8 @@ import produce from 'immer';
 import React, { useCallback, useRef, useState } from 'react';
 
 // Set grid dimensions
-const numRows = 30;
-const numCols = 30;
+const numRows = 70;
+const numCols = 70;
 
 const operations = [
     [0, 1],
@@ -16,20 +16,13 @@ const operations = [
     [-1, 0]
 ]
 
-// Clear grid. OnClick
-const generateEmptyGrid = () => {
-    const rows = [];
-    for (let i = 0; i < numRows; i++) {
-        rows.push(Array.from(Array(numCols), () => 0))
-    }
-
-    return rows;
-}
-
 export default function Canvas() {
 
     // Game running state
     const [running, setRunning] = useState(false);
+
+    // Generation state
+    const [generation, setGeneration] = useState(0)
 
     const runningRef = useRef(running);
     runningRef.current = running;
@@ -61,36 +54,51 @@ export default function Canvas() {
                 }
             });
         });
-
-        setTimeout(runSimulation, 50);
+        setGeneration(generation => generation + 1)
+        setTimeout(runSimulation, 10);
     }, []);
+
+    const generateEmptyGrid = () => {
+        setGeneration(0);
+        const rows = [];
+        for (let i = 0; i < numRows; i++) {
+            rows.push(Array.from(Array(numCols), () => 0))
+        }
+
+        return rows;
+    }
 
     // Grid state
     const [grid, setGrid] = useState(() => {
         return generateEmptyGrid();
     })
 
-    // Setting random grid function. OnClick
+    // Setting random grid function OnClick
     const generateRandomGrid = () => {
+        setGeneration(0);
         const rows = [];
         for (let i = 0; i < numRows; i++) {
             rows.push(Array.from(Array(numCols), () => Math.random() > 0.8 ? 1 : 0))
         }
-    
+
         setGrid(rows);
     }
+
+    // Clear grid OnClick
+    
 
     return (
         <div>
             <div className="left-section">
                 <div className="canvas-section">
 
-                    <h3>Generation #</h3>
+                    <h3>Generation # {generation}</h3>
                     <div className="canvas-sub">
                         <div style={{
                             display: 'grid',
-                            gridTemplateColumns: `repeat(${numCols}, 20px)`
+                            gridTemplateColumns: `repeat(${numCols}, 10px)`
                         }}>
+                            {/* Polpulate grid */}
                             {grid.map((rows, i) =>
                                 rows.map((col, k) =>
                                     <div
@@ -102,8 +110,8 @@ export default function Canvas() {
                                             setGrid(newGrid)
                                         }}
                                         style={{
-                                            width: 20,
-                                            height: 20, backgroundColor: grid[i][k] ? '#067df7' : undefined,
+                                            width: 10,
+                                            height: 10, backgroundColor: grid[i][k] ? '#067df7' : undefined,
                                             border: 'solid 1px black'
                                         }}
                                     />)
@@ -123,11 +131,12 @@ export default function Canvas() {
                         </div>
                     </div>
                 </div>
-                <div className="preset-section">
+                {/* Take care of presets */}
+                {/* <div className="preset-section">
                     <button>Preset 1</button>
                     <button>Preset 2</button>
                     <button>Preset 3</button>
-                </div>
+                </div> */}
             </div>
         </div>
     )
