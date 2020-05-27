@@ -55,7 +55,7 @@ export default function Canvas() {
             });
         });
         setGeneration(generation => generation + 1)
-        setTimeout(runSimulation, 10);
+        setTimeout(runSimulation, 50);
     }, []);
 
     const generateEmptyGrid = () => {
