@@ -60,10 +60,16 @@ export default function Canvas() {
 
     const generateEmptyGrid = () => {
         setGeneration(0);
+
+        if(running){
+            setRunning(false)
+        };
+
         const rows = [];
+
         for (let i = 0; i < numRows; i++) {
             rows.push(Array.from(Array(numCols), () => 0))
-        }
+        };
 
         return rows;
     }
@@ -75,8 +81,15 @@ export default function Canvas() {
 
     // Setting random grid function OnClick
     const generateRandomGrid = () => {
+        
         setGeneration(0);
+
+        if(running){
+            setRunning(false)
+        };
+
         const rows = [];
+
         for (let i = 0; i < numRows; i++) {
             rows.push(Array.from(Array(numCols), () => Math.random() > 0.8 ? 1 : 0))
         }
