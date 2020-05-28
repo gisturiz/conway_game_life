@@ -1,9 +1,10 @@
 import produce from 'immer';
 import React, { useCallback, useRef, useState } from 'react';
+import presets from '../presets/presets';
 
 // Set grid dimensions
-const numRows = 70;
-const numCols = 70;
+const numRows = 50;
+const numCols = 50;
 
 const operations = [
     [0, 1],
@@ -24,6 +25,7 @@ export default function Canvas() {
     // Generation state
     const [generation, setGeneration] = useState(0)
 
+    // Create running ref
     const runningRef = useRef(running);
     runningRef.current = running;
 
@@ -31,7 +33,7 @@ export default function Canvas() {
     const runSimulation = useCallback(() => {
         if (!runningRef.current) {
             return
-        }
+        };
 
         setGrid((g) => {
             return produce(g, gridCopy => {
@@ -61,7 +63,7 @@ export default function Canvas() {
     const generateEmptyGrid = () => {
         setGeneration(0);
 
-        if(running){
+        if (running) {
             setRunning(false)
         };
 
@@ -72,19 +74,19 @@ export default function Canvas() {
         };
 
         return rows;
-    }
+    };
 
     // Grid state
     const [grid, setGrid] = useState(() => {
         return generateEmptyGrid();
-    })
+    });
 
     // Setting random grid function OnClick
     const generateRandomGrid = () => {
-        
+
         setGeneration(0);
 
-        if(running){
+        if (running) {
             setRunning(false)
         };
 
@@ -94,11 +96,28 @@ export default function Canvas() {
             rows.push(Array.from(Array(numCols), () => Math.random() > 0.8 ? 1 : 0))
         }
 
+        console.log(rows)
         setGrid(rows);
-    }
+    };
 
-    // Clear grid OnClick
-    
+    // Preset grid OnClick
+    const presetGrid = (id) => {
+
+        setGeneration(0);
+
+        if (running) {
+            setRunning(false)
+        };
+
+        if (id === 1){
+            setGrid(presets.alienParty)
+        } else if (id === 2){
+            setGrid(presets.gosperGun)
+        } else {
+            setGrid(presets.simkinGlider)
+        };
+
+    }
 
     return (
         <div>
@@ -144,12 +163,11 @@ export default function Canvas() {
                         </div>
                     </div>
                 </div>
-                {/* Take care of presets */}
-                {/* <div className="preset-section">
-                    <button>Preset 1</button>
-                    <button>Preset 2</button>
-                    <button>Preset 3</button>
-                </div> */}
+                <div className="preset-section">
+                    <button onClick={() => presetGrid(1)}>Alien Party</button>
+                    <button onClick={() => presetGrid(2)}>Gosper Gun</button>
+                    <button onClick={() => presetGrid(3)}>Simkin Glider</button>
+                </div>
             </div>
         </div>
     )
