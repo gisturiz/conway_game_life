@@ -3,9 +3,10 @@ import React, { useCallback, useRef, useState } from 'react';
 import presets from '../presets/presets';
 
 // Set grid dimensions
-const numRows = 50;
-const numCols = 50;
+const numRows = 100;
+const numCols = 100;
 
+// Compare operations for cels around current cel
 const operations = [
     [0, 1],
     [0, -1],
